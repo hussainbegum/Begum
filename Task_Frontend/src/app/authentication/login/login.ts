@@ -22,7 +22,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {
+   ) {
     if (this.authService.isLoggedIn()) {
       const role = this.authService.getUserRole();
       if (role === 'ADMIN') {
