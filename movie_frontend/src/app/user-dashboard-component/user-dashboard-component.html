@@ -1,0 +1,53 @@
+<nav class="user-navbar" style="display: flex; justify-content: space-between; padding: 15px; background: #1a202c; color: #fff; align-items: center;">
+  <div class="nav-left">
+    <span class="nav-logo" style="font-weight: bold; font-size: 18px; margin-right: 20px;">🎬 MOVIE BOOKING</span>
+  </div>
+  <div class="nav-links" style="display: flex; gap: 15px;">
+    <a routerLink="/user-dashboard" style="color: #fff; text-decoration: none; font-weight: 600;">Home</a>
+    <a routerLink="/movies" style="color: #a0aec0; text-decoration: none;">Movies</a>
+    <a routerLink="/bookings" style="color: #a0aec0; text-decoration: none;">Bookings</a>
+    <button (click)="logout()" style="background: none; border: 1px solid #e53e3e; color: #e53e3e; padding: 3px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+  </div>
+</nav>
+
+<div class="user-viewport-container" style="padding: 30px; background: #0a0c10; min-height: 100vh; color: #fff;">
+  
+  <header class="welcome-banner" style="text-align: center; background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); padding: 40px; border-radius: 8px; margin-bottom: 40px; border: 1px solid #2d3748;">
+    <h1 style="margin: 0 0 10px 0; color: #ff9f43;">🍿 BOOK YOUR FAVORITE MOVIES</h1>
+    <p style="color: #a0aec0; margin-bottom: 20px;">Browse active theater releases and reserve your seats instantly</p>
+    <button style="padding: 10px 25px; background: #ff9f43; color: #10121a; border: none; font-weight: bold; border-radius: 4px; cursor: pointer;">Browse Movies</button>
+  </header>
+
+  <h2 style="border-left: 4px solid #ff9f43; padding-left: 10px; margin-bottom: 20px; font-size: 22px;">Popular Movies</h2>
+
+  <div class="movies-display-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px;">
+    
+    <div class="movie-card" *ngFor="let m of userMoviesList" style="background: #131722; border: 1px solid #2f3640; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s;">
+      
+      <div class="poster-frame" style="position: relative; padding-top: 140%; background: #1c2130;">
+        <img [src]="m.image || 'https://placehold.co/300box450?text=No+Poster+Found'" alt="Movie Poster" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+      </div>
+
+      <div class="card-details" style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+        <div>
+          <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #f1f2f6;">{{ m.name }}</h3>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center;">
+            <span style="background: rgba(255,159,67,0.15); color: #ff9f43; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">{{ m.language }}</span>
+            <span style="color: #20bf6b; font-weight: bold; font-size: 14px;">⭐ {{ m.rating }}</span>
+          </div>
+        </div>
+        
+        <button style="width: 100%; padding: 8px; background: #3b82f6; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+          Book Now
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="empty-state-fallback" *ngIf="userMoviesList.length === 0" style="text-align: center; padding: 40px; color: #8b9bb4; border: 1px dashed #2f3640; border-radius: 8px;">
+    ℹ️ No active theater listings available in the collection right now. Check back soon!
+  </div>
+
+</div>

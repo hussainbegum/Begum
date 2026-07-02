@@ -1,0 +1,14 @@
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  border-color: #ff9f43 !important;
+}
+
+.card-details button:hover {
+  background-color: #2563eb !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.welcome-banner button:hover {
+  background-color: #f97316 !important;
+}

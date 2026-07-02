@@ -1,0 +1,39 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <div class="logo-section">
+      <h1>🎬 MOVIE BOOKING</h1>
+      <p>Welcome Back!</p>
+    </div>
+
+    <form (submit)="onLogin($event)">
+      <div class="input-group">
+        <label>Email</label>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          [(ngModel)]="email"
+          name="email">
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder="Enter your password"
+          [(ngModel)]="password"
+          name="password">
+      </div>
+
+      <button type="submit" class="login-btn">
+        LOGIN
+      </button>
+
+      <div class="register-link">
+        New User?
+        <a routerLink="/register">Register Here</a>
+      </div>
+    </form>
+
+  </div>
+</div>

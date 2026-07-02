@@ -1,0 +1,122 @@
+<nav class="admin-navbar" style="display: flex; justify-content: space-between; padding: 15px; background: #131722; color: #fff; border-bottom: 2px solid #2f3640;">
+  <div class="nav-left" style="display: flex; align-items: center;">
+    <span class="nav-logo" style="font-weight: bold; margin-right: 20px; color: #ff9f43; letter-spacing: 1.5px; font-size: 20px;">🎬 MovieApp</span>
+    <span class="nav-brand-tab" style="color: #8b9bb4; border-left: 2px solid #2f3640; padding-left: 15px; font-weight: 500;">Movies Console</span>
+  </div>
+  <div class="nav-right" style="display: flex; align-items: center;">
+    <span class="admin-badge" style="background-color: rgba(255, 159, 67, 0.15); color: #ff9f43; border: 1px solid rgba(255, 159, 67, 0.3); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-right: 15px;">Admin Terminal</span>
+    <button class="logout-btn" (click)="logout()" style="background: transparent; border: 1px solid #ff4757; color: #ff4757; padding: 6px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">Logout</button>
+  </div>
+</nav>
+
+<div class="dashboard-viewport-wrapper">
+
+  <section class="stats-counter-grid">
+    <div class="counter-card total-movies-pill">
+      <h3>{{ totalMoviesCount }}</h3>
+      <p>Total Movies</p>
+    </div>
+    <div class="counter-card average-rating-pill">
+      <h3>⭐ {{ averageRating }}/10</h3>
+      <p>Average Rating</p>
+    </div>
+    <div class="counter-card top-rated-pill">
+      <h3 class="truncate-title">{{ topRatedMovieName }}</h3>
+      <p>🏆 Top Rated</p>
+    </div>
+  </section>
+
+  <section class="management-control-workspace">
+    <h2>{{ isEditing ? '📝 Edit Movie Details' : '🎬 Add New Movie Workspace' }}</h2>
+    
+    <div class="admin-form-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px;">
+      
+      <div class="form-group">
+        <label>Movie Name</label>
+        <input type="text" [(ngModel)]="movieForm.name" placeholder="Enter movie title (e.g. Kingdom)">
+      </div>
+
+      <div class="form-group">
+        <label>Language Variant</label>
+        <select [(ngModel)]="movieForm.language">
+          <option value="">Select Dialect</option>
+          <option value="Telugu">Telugu</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Tamil">Tamil</option>
+          <option value="English">English</option>
+          <option value="K Drama">K Drama</option>
+          <option value="Malayalam">Malayalam</option>
+          <option value="Kanada">Kanada</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Rating Metric (1 - 10)</label>
+        <input type="number" [(ngModel)]="movieForm.rating" min="1" max="10" step="0.1" placeholder="e.g. 8.5">
+      </div>
+
+      <div class="form-group">
+        <label>Poster Image Access URL Link</label>
+        <input type="text" [(ngModel)]="movieForm.image" placeholder="Paste structural poster image source path URL...">
+      </div>
+
+      <div class="form-group" style="grid-column: span 2;">
+        <label>Review Summary Remarks</label>
+        <input type="text" [(ngModel)]="movieForm.review" placeholder="Write a short evaluation or summary remarks...">
+      </div>
+
+    </div>
+
+    <div class="form-actions-row">
+      <button (click)="saveMovie()" [ngClass]="isEditing ? 'update-mode-btn' : 'add-mode-btn'">
+        {{ isEditing ? 'Update Movie Entry' : 'Add Movie to Database' }}
+      </button>
+      <button *ngIf="isEditing" class="cancel-action-btn" (click)="resetForm()">Cancel Edit</button>
+    </div>
+  </section>
+
+  <div class="search-filter-belt" style="margin-bottom: 20px;">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="🔍 Search Movie database records instantly by matching name string or language criteria properties...">
+  </div>
+
+  <section class="table-sheet-section">
+    <div style="padding: 15px; border-bottom: 1px solid var(--border-color);">
+      <h2>🎥 Current Movie Collection Registry Sheet</h2>
+    </div>
+    <table class="admin-data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr>
+          <th style="padding: 12px; width: 100px;">Poster View</th>
+          <th style="padding: 12px;">Movie Name</th>
+          <th style="padding: 12px;">Language</th>
+          <th style="padding: 12px;">Rating Score</th>
+          <th style="padding: 12px;">Review Descriptions Snippet</th>
+          <th style="padding: 12px; text-align: center; width: 200px;">Actions Console Panel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of filteredMovies">
+          <td style="padding: 12px;">
+            <img [src]="m.image || 'https://placehold.co/60x90?text=No+Poster'" alt="Poster">
+          </td>
+          <td style="padding: 12px; font-weight: bold; color: #fff;">{{ m.name }}</td>
+          <td style="padding: 12px;"><span class="badge-lang-tag">{{ m.language || 'Unknown' }}</span></td>
+          <td style="padding: 12px; color: #ff9f43; font-weight: bold;">⭐ {{ m.rating }}/10</td>
+          <td style="padding: 12px; font-style: italic; color: #8b9bb4; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            “{{ m.review }}”
+          </td>
+          <td style="padding: 12px; text-align: center;">
+            <button (click)="editMovie(m)" style="padding: 6px 14px; margin-right: 8px; cursor: pointer;">Edit</button>
+            <button (click)="deleteMovie(m.id || m._id)" style="padding: 6px 14px; cursor: pointer;">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredMovies.length === 0">
+          <td colspan="6" class="empty-table-state" style="text-align: center; padding: 40px;">
+            ⚠️ Operational warning: No matching database collection rows found for query criteria.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
